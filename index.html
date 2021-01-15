@@ -11,7 +11,7 @@
         }
     </style>
 </head>
-<body class="scroll-smooth h-screen overflow-y-hidden">
+<body class="h-screen overflow-y-hidden">
     <script>
         function elevatorData(){
             return {
@@ -39,7 +39,6 @@
                 },
                 init($refs){
                     this.elevator(1,$refs);
-                    for(let f = 1; f <= 3; f++) this.centerFloor($refs[f]);
                 },
                 centerFloor(floor){
                     floor.scrollLeft = (floor.scrollWidth - floor.clientWidth) / 2
