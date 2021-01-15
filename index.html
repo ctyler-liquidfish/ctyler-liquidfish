@@ -5,26 +5,89 @@
     <title>TW Shannon floor aspect ratio test</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer=""></script>
+    <style>
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
-<body class="">
-    
-    <section class="bg-gray-500 flex h-screen items-center overflow-x-scroll transform w-full">
-<div class="mx-auto"><div class="bg-center bg-cover" style="
-    width: 300vw;
-    padding-top: 56.25%;
-    max-width: 178vh;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/72/16x9_by_Pengo.svg');
-    "></div></div>
-    </section>
-    
-    
+<body class="scroll-smooth">
+    <script>
+        function elevatorData(){
+            return {
+                floor: null,
+                destination: null,
+                elevator: function(floor,$refs){
+                    // if(this.floor) this.centerFloor($refs[this.floor]);
+                    this.floor = null;
+                    this.destination = floor;
+                    $refs[floor].scrollIntoView({ behavior: 'smooth'});
+                },
+                elevatorStop(){
+                    this.floor = this.destination;
+                    this.destination = null;
+                },
+                buttonColor(floor){
+                    switch(floor){
+                        case (this.floor):
+                            return 'bg-blue-300';
+                        case (this.destination):
+                            return 'bg-white';
+                        default:
+                            return 'bg-gray-300';
+                    }
+                },
+                init($refs){
+                    this.elevator(1,$refs);
+                    for(let f = 1; f <= 3; f++) this.centerFloor($refs[f]);
+                },
+                centerFloor(floor){
+                    floor.scrollLeft = (floor.scrollWidth - floor.clientWidth) / 2
+                }
+            };
+        }
+    </script>
+    <div x-data="elevatorData()" x-init="$nextTick(()=>init($refs))" x-on:scroll.window.debounce="elevatorStop()">
+        <nav class="bottom-0 fixed right-0 z-50">
+            <div class="flex flex-col-reverse p-6 bg-gray-100 bg-opacity-50 rounded-lg space-y-4 space-y-reverse">
+                <button x-on:click="elevator(1,$refs)" :class="buttonColor(1)" class="rounded-full text-xl border border-black p-3">1st</button>
+                <button x-on:click="elevator(2,$refs)" :class="buttonColor(2)" class="rounded-full text-xl border border-black p-3">2nd</button>
+                <button x-on:click="elevator(3,$refs)" :class="buttonColor(3)" class="rounded-full text-xl border border-black p-3">3rd</button>
+            </div>
+        </nav>
+        <div class="fixed inset-0 z-40 pointer-events-none">
 
-
-<section class="bg-gray-500 flex h-screen items-center overflow-x-scroll transform w-full">
-<div class="mx-auto"><div class="bg-center bg-cover" style="
-    width: 300vw;
-    padding-top: 56.25%;
-    max-width: 178vh;
-    background-image: url('https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80');
-    "></div></div>
-    </section></body></html>
+        </div>
+        <section x-ref="3" class="scroll-smooth bg-gray-500 flex h-screen items-center overflow-x-scroll transform w-full">
+            <div class="mx-auto">
+                <div class="bg-center bg-cover" style="
+                    width: 300vw;
+                    padding-top: 56.25%;
+                    max-width: 178vh;
+                    background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/72/16x9_by_Pengo.svg');
+                "></div>
+            </div>
+        </section>
+        <section x-ref="2" class="scroll-smooth bg-gray-500 flex h-screen items-center overflow-x-scroll transform w-full">
+            <div class="mx-auto">
+                <div class="bg-center bg-cover" style="
+                    width: 300vw;
+                    padding-top: 56.25%;
+                    max-width: 178vh;
+                    background-image: url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+                "></div>
+            </div>
+        </section>
+        <section x-ref="1" class="scroll-smooth bg-gray-500 flex h-screen items-center overflow-x-scroll transform w-full">
+            <div class="mx-auto">
+                <div class="bg-center bg-cover" style="
+                    width: 300vw;
+                    padding-top: 56.25%;
+                    max-width: 178vh;
+                    background-image: url('https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80');
+                "></div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
